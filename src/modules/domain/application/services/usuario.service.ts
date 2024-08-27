@@ -34,8 +34,9 @@ export class UsuarioService {
     createUsuarioDto: CreateUsuarioDto,
   ): Promise<{ message: string; usuario: Usuario }> {
     if (createUsuarioDto.cpf.length < 11) {
-      throw new BadRequestException(' O CPF deve ter 11 caracteres! ');
+      throw new BadRequestException('O CPF deve ter 11 caracteres!');
     }
+
     const existingUser = await this.usuarioRepository.findOne({
       where: {
         $or: [{ cpf: createUsuarioDto.cpf }, { email: createUsuarioDto.email }],
@@ -47,25 +48,20 @@ export class UsuarioService {
 
     const usuario = this.usuarioRepository.create(createUsuarioDto);
     await this.usuarioRepository.save(usuario);
+
     const contaUsuario = new ContaUsuario();
     contaUsuario.saldo = 0;
     contaUsuario.ownerId = usuario._id;
-    await this.contaService.saveConta(contaUsuario);
+    await this.contaService.saveConta(contaUsuario, createUsuarioDto);
 
-    return { message: 'Usuário criado com sucesso', usuario };
+    return { message: 'O usuário foi criado com sucesso!', usuario };
   }
+
   async deleteAll(): Promise<{ message: string }> {
     const result = await this.usuarioRepository.deleteMany({});
     if (result.deletedCount === 0) {
       throw new NotFoundException('Nenhum usuario encontrado para deletar');
     }
     return { message: 'Usuarios deletados com sucesso!' };
-  }
-
-  async getUserById(id: string) {
-    const _result = await this.usuarioRepository.findOne({
-      where: { id: new ObjectId(id) },
-    });
-    return _result;
   }
 }

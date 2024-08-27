@@ -7,6 +7,7 @@ import {
   HttpStatus,
   HttpCode,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { LojistaService } from '../application/services/lojista.service';
 import { Lojista } from '../entities/lojista.entity';
@@ -19,10 +20,6 @@ export class LojistaController {
   @Get('getAllLojistas')
   findAll(): Promise<Lojista[]> {
     return this.lojistaService.findAll();
-  }
-  @Get('getLojistaById/:id')
-  async getUserById(@Param('id') id: string) {
-    return await this.lojistaService.getLojistaById(id);
   }
   @Delete('delete-all')
   @HttpCode(HttpStatus.NO_CONTENT)

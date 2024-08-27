@@ -186,6 +186,33 @@ Não há autenticação integrada nesta documentação. Suponha que todas as ope
 
 ## Contas`
 
+### Criar Contas
+- **Descrição**: As contas são criadas automaticamente com o respectivo CPF ou CNPJ fornecido na hora da criação do Usuário/Lojista. O default para saldo na conta é 0
+
+### Adicionar Saldo
+- **Endpoint**: `POST contas/adicionar-saldo`
+- **Descrição**: Método criado para adicionar saldo à conta para fins de teste.
+
+## Tratamento de Erros
+  - **404 Not Found**: Quando o CPF/CNPJ no body da resposta não é encontrado no banco de dados.
+
+### Transferir Saldo
+
+- **Endpoint**: `POST contas/transferir`
+- **Descrição**: Transfere o dinheiro de uma conta para a outra.
+- **Respostas**:
+  - **200 OK**:
+  ```json
+  {
+    "message": "Transferência realizada com sucesso!"
+  }
+  ```
+## Tratamento de Erros
+
+  - **404 Not Found**: Retornado quando a conta pagadora ou recebedora não é encontrada. Cada um possui sua própria mensagem de erro.
+  - **403 Forbidden**: Retornado quando uma conta do tipo Lojista tenta efetuar uma transferência de saldo.
+  - **400 Bad Request**: Retornado quando o saldo da conta pagadora é insuficiente.
+
 ### Deletar Contas
 
 - **Endpoint**: `DELETE /contas/delete-all`

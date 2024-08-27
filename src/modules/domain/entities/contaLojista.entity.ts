@@ -15,4 +15,9 @@ export class ContaLojista extends Conta {
 
   @Column()
   ownerId: ObjectId;
+
+  @Column()
+  autoIncrementId: number;
+  @Column()
+  cnpj: string;
 }

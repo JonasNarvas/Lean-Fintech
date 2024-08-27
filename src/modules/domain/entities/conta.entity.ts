@@ -5,7 +5,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export abstract class Conta {
   @PrimaryGeneratedColumn()
-  _id: number;
+  _id: ObjectId;
 
   @Column()
   fullName: string;

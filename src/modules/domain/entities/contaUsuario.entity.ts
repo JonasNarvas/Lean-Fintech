@@ -15,4 +15,9 @@ export class ContaUsuario extends Conta {
 
   @Column()
   ownerId: ObjectId;
+
+  @Column()
+  autoIncrementId: number;
+  @Column()
+  cpf: string;
 }

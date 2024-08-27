@@ -29,17 +29,29 @@ export class LojistaService {
     }
     return lojistas;
   }
+  async findLojistaByCNPJ(cnpj: string): Promise<Lojista> {
+    const lojista = await this.lojistaRepository.findOne({
+      where: { cnpj },
+    });
 
+    if (!lojista) {
+      throw new NotFoundException(
+        'Lojista não encontrado para o CNPJ fornecido.',
+      );
+    }
+
+    return lojista;
+  }
   async create(
     createLojistaDto: CreateLojistaDto,
   ): Promise<{ message: string; lojista: Lojista }> {
-    if (createLojistaDto.cnpj.length < 11) {
-      throw new BadRequestException(' O CNPJ deve ter 11 caracteres! ');
+    if (createLojistaDto.cnpj.length < 14) {
+      throw new BadRequestException('O CNPJ deve ter 14 caracteres!');
     }
     const existingUser = await this.lojistaRepository.findOne({
       where: {
         $or: [
-          { cpf: createLojistaDto.cnpj },
+          { cnpj: createLojistaDto.cnpj },
           { email: createLojistaDto.email },
         ],
       },
@@ -52,21 +64,15 @@ export class LojistaService {
     const contaLojista = new ContaLojista();
     contaLojista.saldo = 0;
     contaLojista.ownerId = lojista._id;
-    await this.contaService.saveConta(contaLojista);
-    return { message: ' O lojista foi criado com sucesso! ', lojista };
+    await this.contaService.saveConta(contaLojista, createLojistaDto);
+    return { message: 'O lojista foi criado com sucesso!', lojista };
   }
+
   async deleteAll(): Promise<{ message: string }> {
     const result = await this.lojistaRepository.deleteMany({});
     if (result.deletedCount === 0) {
       throw new NotFoundException('Nenhum lojista encontrado para deletar');
     }
     return { message: 'Lojistas deletados com sucesso! ' };
-  }
-
-  async getLojistaById(id: string) {
-    const _result = await this.lojistaRepository.findOne({
-      where: { id: new ObjectId(id) },
-    });
-    return _result;
   }
 }
