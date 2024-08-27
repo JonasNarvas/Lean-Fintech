@@ -3,13 +3,13 @@ import {
   HttpException,
   HttpStatus,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ContaUsuario } from '../../entities/contaUsuario.entity';
 import { ContaLojista } from '../../entities/contaLojista.entity';
 import { AdicionarSaldoDto } from '../dto/adicionarSaldo.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ObjectId } from 'mongodb';
 
 @Injectable()
@@ -64,37 +64,16 @@ export class ContaService {
 
   async adicionarSaldo(adicionarSaldoDto: AdicionarSaldoDto): Promise<void> {
     const { contaId, valor } = adicionarSaldoDto;
-
-    // Converte o ID para ObjectId
-    let contaObjectId: ObjectId;
-    try {
-      contaObjectId = new ObjectId(contaId);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      throw new BadRequestException('ID inválido');
-    }
-
-    // Tenta encontrar a conta de usuário
-    let conta = await this.contaUsuarioRepository.findOneBy({
-      _id: contaObjectId,
+    let conta = await this.contaLojistaRepository.findOne({
+      where: { _id: contaId },
     });
-
-    // Se não for um usuário, tenta encontrar a conta de lojista
-    if (!conta) {
-      conta = await this.contaLojistaRepository.findOneBy({
-        _id: contaObjectId,
-      });
-    }
-
-    // Se a conta não for encontrada, retorna 404
     if (!conta) {
       throw new NotFoundException('Conta não encontrada');
     }
-
-    // Adiciona o valor ao saldo atual da conta
+    // Adicionar o valor ao saldo da conta
     conta.saldo += valor;
 
-    // Salva a conta atualizada
+    // Salve a conta atualizada de volta ao banco de dados
     if (conta instanceof ContaUsuario) {
       await this.contaUsuarioRepository.save(conta);
     } else {

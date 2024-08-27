@@ -22,8 +22,8 @@ export class ContaController {
     return this.contaService.fazerTransferencia(id, valor);
   }
   @Post('adicionar-saldo')
-  async adicionarSaldo(@Body() adicionarSaldo: AdicionarSaldoDto) {
-    await this.contaService.adicionarSaldo(adicionarSaldo);
+  async adicionarSaldo(@Body() adicionarSaldoDto: AdicionarSaldoDto) {
+    await this.contaService.adicionarSaldo(adicionarSaldoDto);
     return { message: 'Saldo adicionado com sucesso!' };
   }
 }
