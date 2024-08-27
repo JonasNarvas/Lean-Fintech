@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateLojistaDto {
   @IsNotEmpty()
@@ -12,7 +6,6 @@ export class CreateLojistaDto {
   fullName: string;
 
   @IsNotEmpty()
-  @Matches(/^\d{14}$/, { message: 'CNPJ deve conter 14 dígitos numéricos' })
   cnpj: string;
 
   @IsNotEmpty()

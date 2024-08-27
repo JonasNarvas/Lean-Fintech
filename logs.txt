@@ -1,0 +1,3 @@
+2024-08-27T15:33:21.259Z - Conta de usuário criada com sucesso.
+2024-08-27T15:33:21.267Z - Erro ao criar conta de usuário: CPF inválido.
+2024-08-27T15:33:21.271Z - Erro ao criar conta de usuário: Email já em uso.

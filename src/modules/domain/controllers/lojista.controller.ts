@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpStatus,
+  HttpCode,
+  Delete,
+} from '@nestjs/common';
 import { LojistaService } from '../application/services/lojista.service';
 import { Lojista } from '../entities/lojista.entity';
 import { CreateLojistaDto } from '../application/dto/createLojista.dto';
@@ -15,13 +24,15 @@ export class LojistaController {
   async getUserById(@Param('id') id: string) {
     return await this.lojistaService.getLojistaById(id);
   }
-
-  /*@Post('createData')
-  create(@Body() lojista: Lojista): Promise<Lojista> {
-    return this.lojistaService.create(lojista);
-  }*/
+  @Delete('delete-all')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteAll(): Promise<{ message: string }> {
+    return this.lojistaService.deleteAll();
+  }
   @Post('createuser')
-  async create(@Body() createlojistaDto: CreateLojistaDto): Promise<Lojista> {
+  async create(
+    @Body() createlojistaDto: CreateLojistaDto,
+  ): Promise<{ message: string; lojista: Lojista }> {
     return await this.lojistaService.create(createlojistaDto);
   }
 }

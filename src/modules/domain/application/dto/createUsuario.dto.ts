@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateUsuarioDto {
   @IsNotEmpty()
@@ -12,7 +6,6 @@ export class CreateUsuarioDto {
   fullName: string;
 
   @IsNotEmpty()
-  @Matches(/^\d{11}$/, { message: 'CPF deve conter 11 dígitos numéricos' })
   cpf: string;
 
   @IsNotEmpty()

@@ -1,4 +1,4 @@
-version: '3.8'
+version: 'latest'
 
 services:
   # Serviço para a aplicação NestJS
@@ -12,8 +12,6 @@ services:
       - MONGO_URI=mongodb+srv://root:root@nestjs.d9zns.mongodb.net/?retryWrites=true&w=majority&appName=Nestjs
     depends_on:
       - mongo
-
-  # Serviço para o MongoDB
   mongo:
     image: mongo:latest
     ports:

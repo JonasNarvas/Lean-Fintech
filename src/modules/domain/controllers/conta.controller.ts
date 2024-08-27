@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  HttpStatus,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
 import { ContaService } from '../application/services/conta.service';
 import { AdicionarSaldoDto } from '../application/dto/adicionarSaldo.dto';
 
@@ -25,5 +33,10 @@ export class ContaController {
   async adicionarSaldo(@Body() adicionarSaldoDto: AdicionarSaldoDto) {
     await this.contaService.adicionarSaldo(adicionarSaldoDto);
     return { message: 'Saldo adicionado com sucesso!' };
+  }
+  @Delete('delete-all')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteAll(): Promise<{ message: string }> {
+    return this.contaService.deleteAll();
   }
 }

@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { Usuario } from '../../entities/usuario.entity';
@@ -17,22 +22,44 @@ export class UsuarioService {
     private readonly contaService: ContaService,
   ) {}
 
-  findAll(): Promise<Usuario[]> {
-    return this.usuarioRepository.find();
+  async findAll(): Promise<Usuario[]> {
+    const lojistas = await this.usuarioRepository.find();
+    if (lojistas.length === 0) {
+      throw new NotFoundException('Não há registro de lojistas para mostrar');
+    }
+    return lojistas;
   }
 
-  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    // Criação do Usuario
+  async create(
+    createUsuarioDto: CreateUsuarioDto,
+  ): Promise<{ message: string; usuario: Usuario }> {
+    if (createUsuarioDto.cpf.length < 11) {
+      throw new BadRequestException(' O CPF deve ter 11 caracteres! ');
+    }
+    const existingUser = await this.usuarioRepository.findOne({
+      where: {
+        $or: [{ cpf: createUsuarioDto.cpf }, { email: createUsuarioDto.email }],
+      },
+    });
+    if (existingUser) {
+      throw new ConflictException('CPF ou e-mail já estão em uso.');
+    }
+
     const usuario = this.usuarioRepository.create(createUsuarioDto);
     await this.usuarioRepository.save(usuario);
-    // Criação da ContaUsuario associada
     const contaUsuario = new ContaUsuario();
     contaUsuario.saldo = 0;
     contaUsuario.ownerId = usuario._id;
-    // Salvar a ContaUsuario
     await this.contaService.saveConta(contaUsuario);
 
-    return usuario;
+    return { message: 'Usuário criado com sucesso', usuario };
+  }
+  async deleteAll(): Promise<{ message: string }> {
+    const result = await this.usuarioRepository.deleteMany({});
+    if (result.deletedCount === 0) {
+      throw new NotFoundException('Nenhum usuario encontrado para deletar');
+    }
+    return { message: 'Usuarios deletados com sucesso!' };
   }
 
   async getUserById(id: string) {

@@ -61,6 +61,16 @@ export class ContaService {
       return await this.contaLojistaRepository.save(conta);
     }
   }
+  async deleteAll(): Promise<{ message: string }> {
+    const resultUsuario = await this.contaUsuarioRepository.deleteMany({});
+    const resultLojista = await this.contaLojistaRepository.deleteMany({});
+
+    if (resultUsuario.deletedCount === 0 && resultLojista.deletedCount === 0) {
+      throw new NotFoundException('Nenhuma conta encontrada para deletar');
+    } else {
+      return { message: 'Todas as contas foram deletadas com sucesso' };
+    }
+  }
 
   async adicionarSaldo(adicionarSaldoDto: AdicionarSaldoDto): Promise<void> {
     const { contaId, valor } = adicionarSaldoDto;
