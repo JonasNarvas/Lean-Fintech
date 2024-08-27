@@ -1,85 +1,207 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Documentação da API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Sumário
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. [Introdução](#introdução)
+2. [Autenticação](#autenticação)
+3. [Usuários](#usuários)
+   - [Criar Usuário](#criar-usuário)
+   - [Listar Usuários](#listar-usuários)
+   - [Deletar Usuário](#deletar-usuário)
+4. [Lojistas](#lojistas)
+   - [Criar Lojista](#criar-lojista)
+   - [Listar Lojistas](#listar-lojistas)
+   - [Deletar Lojista](#deletar-lojista)
+5. [Contas](#contas)
+   - [Deletar Contas](#deletar-contas)
+6. [Tratamento de Erros](#tratamento-de-erros)
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Introdução
 
-## Project setup
+Esta API é uma plataforma de pagamento que permite a criação de usuários e lojistas, bem como a gestão de suas contas. A API é construída com NestJS, TypeORM e MongoDB.
 
-```bash
-$ npm install
-```
+## Autenticação
 
-## Compile and run the project
+Não há autenticação integrada nesta documentação. Suponha que todas as operações são acessíveis publicamente.
 
-```bash
-# development
-$ npm run start
+## Usuários
 
-# watch mode
-$ npm run start:dev
+### Criar Usuário
 
-# production mode
-$ npm run start:prod
-```
+- **Endpoint**: `POST /usuarios/createuser`
+- **Descrição**: Cria um novo usuário.
+- **Requisição**:
 
-## Run tests
+    ```json
+    {
+      "nomeCompleto": "Nome Completo",
+      "cpf": "12345678901",
+      "email": "usuario@example.com",
+      "senha": "senha123"
+    }
+    ```
 
-```bash
-# unit tests
-$ npm run test
+- **Respostas**:
+  - **200 OK**:
 
-# e2e tests
-$ npm run test:e2e
+    ```json
+    {
+      "message": "Usuário criado com sucesso."
+    }
+    ```
 
-# test coverage
-$ npm run test:cov
-```
+  - **400 Bad Request**:
 
-## Resources
+    ```json
+    {
+      "message": "CPF deve ter pelo menos 11 caracteres."
+    }
+    ```
 
-Check out a few resources that may come in handy when working with NestJS:
+    ```json
+    {
+      "message": "CPF ou e-mail já estão em uso."
+    }
+    ```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Listar Usuários
 
-## Support
+- **Endpoint**: `GET /usuarios/getAllUsuarios`
+- **Descrição**: Lista todos os usuários.
+- **Respostas**:
+  - **200 OK**:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+    ```json
+    [
+      {
+        "id": "unique_id",
+        "nomeCompleto": "Nome Completo",
+        "cpf": "12345678901",
+        "email": "usuario@example.com"
+      }
+    ]
+    ```
 
-## Stay in touch
+  - **404 Not Found**:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    ```json
+    {
+      "message": "Não há usuários para mostrar."
+    }
+    ```
 
-## License
+### Deletar Usuário
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Endpoint**: `DELETE /usuarios/delete-all`
+- **Descrição**: Deleta todos os usuários.
+- **Respostas**:
+  - **200 OK**:
+
+    ```json
+    {
+      "message": "Usuarios deletados com sucesso!"
+    }
+    ```
+
+## Lojistas
+
+### Criar Lojista
+
+- **Endpoint**: `POST /lojistas/createuser`
+- **Descrição**: Cria um novo lojista.
+- **Requisição**:
+
+    ```json
+    {
+      "nomeCompleto": "Nome Completo",
+      "cnpj": "12345678000195",
+      "email": "lojista@example.com",
+      "senha": "senha123"
+    }
+    ```
+
+- **Respostas**:
+  - **200 OK**:
+
+    ```json
+    {
+      "message": "Lojista criado com sucesso."
+    }
+    ```
+
+  - **400 Bad Request**:
+
+    ```json
+    {
+      "message": "CNPJ deve ter pelo menos 14 caracteres."
+    }
+    ```
+
+    ```json
+    {
+      "message": "CPF ou e-mail já estão em uso."
+    }
+    ```
+
+### Listar Lojistas
+
+- **Endpoint**: `GET /lojistas/getAllLojistas`
+- **Descrição**: Lista todos os lojistas.
+- **Respostas**:
+  - **200 OK**:
+
+    ```json
+    [
+      {
+        "id": "unique_id",
+        "nomeCompleto": "Nome Completo",
+        "cnpj": "12345678000195",
+        "email": "lojista@example.com"
+      }
+    ]
+    ```
+
+  - **404 Not Found**:
+
+    ```json
+    {
+      "message": "Não há lojistas para mostrar."
+    }
+    ```
+
+### Deletar Lojista
+
+- **Endpoint**: `DELETE /lojistas/delete-all`
+- **Descrição**: Deleta todos os lojisas.
+- **Respostas**:
+  - **200 OK**:
+
+    ```json
+    {
+      "message": "Lojistas deletados com sucesso!"
+    }
+    ```
+
+## Contas`
+
+### Deletar Contas
+
+- **Endpoint**: `DELETE /contas/delete-all`
+- **Descrição**: Deleta todas as contas de usuário e de lojista.
+- **Respostas**:
+  - **200 OK**:
+
+    ```json
+    {
+      "message": "Todas as contas foram deletadas com sucesso"
+    }
+    ```
+
+## Tratamento de Erros
+
+- **404 Not Found**: Retornado quando um recurso não é encontrado, como um usuário, lojista ou conta específica.
+- **400 Bad Request**: Retornado quando há um erro com a entrada fornecida, como CPF/CNPJ inválido ou já existente.
+
+---
